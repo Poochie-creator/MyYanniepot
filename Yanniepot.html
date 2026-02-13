@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Photoism Album</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Yanniepot</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
     
@@ -23,9 +22,9 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            padding: 50px 0;
+            align-items: center;
             min-height: 100vh;
-            overflow-y: auto;
+            overflow-x: hidden;
             font-family: 'Indie Flower', cursive;
         }
 
@@ -43,17 +42,24 @@
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
-        /* 3D Book Container */
+        .viewport-wrapper {
+            transition: transform 0.8s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         .book-container {
             position: relative;
-            width: 400px;
-            height: 620px; 
+            width: 350px;
+            height: 580px; 
             perspective: 2500px;
             transition: transform 0.8s ease;
         }
 
         .book-container.is-open {
-            transform: translateX(200px); 
+            transform: translateX(175px); 
         }
 
         .book-cover {
@@ -80,131 +86,162 @@
             border-radius: 4px;
         }
 
+        .message-content {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            transition-delay: 0.5s;
+        }
+        .is-open .message-content {
+            opacity: 1;
+        }
+
         .cover-back {
             transform: rotateY(180deg);
-            padding: 40px 30px;
+            padding: 30px 20px;
             text-align: center;
             border-right: 2px solid #f3f4f6;
         }
 
-        /* The Right Page (The Photo Spread) */
         .base-page {
             position: absolute;
             width: 100%; height: 100%;
             top: 0; left: 0;
             background: var(--paper);
             border: 1px solid #e5e7eb;
-            padding: 25px 20px;
+            padding: 20px 15px;
             z-index: 1;
             box-shadow: 15px 15px 40px rgba(0,0,0,0.1);
             border-radius: 4px;
         }
 
+        /* 2. THE UNEVEN GRID STYLING */
         .photobooth-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: repeat(3, 1fr);
-            gap: 12px;
-            height: 82%;
-            margin-top: 15px;
+            gap: 15px; /* More gap for uneven look */
+            height: 80%;
+            margin-top: 20px;
+            padding: 10px;
         }
 
         .photo-frame {
-            background: #f3f4f6;
+            background: white;
+            padding: 4px;
             overflow: hidden;
-            border: 1px solid #eee;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #ddd;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Random Rotations for the uneven aesthetic */
+        .photo-frame:nth-child(1) { transform: rotate(-3deg) translateY(5px); }
+        .photo-frame:nth-child(2) { transform: rotate(4deg) translateY(-5px); }
+        .photo-frame:nth-child(3) { transform: rotate(2deg) translateX(3px); }
+        .photo-frame:nth-child(4) { transform: rotate(-5deg) translateY(8px); }
+        .photo-frame:nth-child(5) { transform: rotate(-2deg) translateY(-2px); }
+        .photo-frame:nth-child(6) { transform: rotate(3deg) translateX(-4px); }
 
         .ribbon {
             position: absolute;
             right: -10px; top: 40px;
-            width: 45px; height: 100px;
+            width: 40px; height: 90px;
             background: var(--ribbon);
             z-index: 11;
             display: flex; align-items: center; justify-content: center;
             color: white; writing-mode: vertical-rl;
-            font-family: sans-serif; font-size: 0.7rem; letter-spacing: 2px;
+            font-family: sans-serif; font-size: 0.6rem; letter-spacing: 2px;
             box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
         }
         .ribbon::after {
-            content: ''; position: absolute; bottom: -15px; left: 0;
-            border-left: 22.5px solid var(--ribbon); border-right: 22.5px solid var(--ribbon); border-bottom: 15px solid transparent;
+            content: ''; position: absolute; bottom: -12px; left: 0;
+            border-left: 20px solid var(--ribbon); border-right: 20px solid var(--ribbon); border-bottom: 12px solid transparent;
         }
 
         h1 { font-family: 'Dancing Script', cursive; color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .viewport-wrapper { transform: scale(0.8); }
+            .book-container.is-open { transform: translateX(140px); }
+        }
+        @media (max-width: 480px) {
+            .viewport-wrapper { transform: scale(0.5); }
+            .book-container.is-open { transform: translateX(160px); }
+        }
     </style>
 </head>
 <body>
 
     <div id="hearts-bg"></div>
 
-    <div class="book-container" id="book">
-        
-        <div class="book-cover" id="trigger">
-            <div class="cover-front flex flex-col items-center justify-center p-10">
-                <div class="ribbon">UNTIE ME</div>
-                <h1 class="text-6xl text-center">For You</h1>
-                <p class="mt-6 text-gray-400 uppercase tracking-widest text-xs font-sans">Our Photo Album</p>
-                <div class="mt-24 text-4xl text-red-300">❤</div>
-            </div>
+    <div class="viewport-wrapper">
+        <div class="book-container" id="book">
+            
+            <div class="book-cover" id="trigger">
+                <div class="cover-front flex flex-col items-center justify-center p-8">
+                    <div class="ribbon">UNTIE ME</div>
+                    <h1 class="text-4xl text-center">For My Yanniepot</h1>
+                    <p class="mt-4 text-gray-400 uppercase tracking-widest text-[11px] font-sans">Click to open 🩷</p>
+                    <div class="mt-16 text-3xl text-red-300">❤</div>
+                </div>
 
-            <div class="cover-back">
-                <h1 class="text-4xl mb-10">To My Valentine</h1>
-                <div class="text-gray-700 space-y-6 text-xl">
-                    <p>Every photo tells a story of a moment I never want to forget.</p>
-                    <p>Thank you for being my favorite person to capture life with.</p>
-                    <p>You make every day feel like Valentine's Day.</p>
-                    <div class="pt-16 text-3xl text-[#ff4d6d]">Forever Yours, <br> <span class="text-lg text-gray-400">[Your Name]</span></div>
+                <div class="cover-back">
+                    <div class="message-content">
+                        <h1 class="text-3xl mb-4">Happy Valentines Love!!</h1>
+                        <div class="text-gray-700 space-y-4 text-sm leading-relaxed">
+                            <p>Alam kong naging masyadong busy ang mga nagdaang araw at pasensya na kung hindi kita na-date ngayon.</p>
+                            <p>Bawi ako sa monthsary natin, promise. I really appreciate you staying by my side and understanding my situation despite everything.</p>
+                            <p>Sana magustuhan mo itong album na 'to. Every photo here makes me smile.</p>
+                            <div class="pt-8 text-2xl text-[#ff4d6d]">Love you always, <br> <span class="text-lg text-gray-400">Poochie</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="base-page">
+                <div class="flex justify-between items-center px-1 mb-2">
+                    <div class="w-4 h-4 border border-black opacity-10"></div> 
+                    <div class="bg-black text-white text-[8px] px-3 py-0.5 rounded-full font-sans font-bold tracking-tighter">photoism</div>
+                </div>
+
+                <div class="photobooth-grid">
+                    <div class="photo-frame"><img src="pic1.jpg" alt="1"></div>
+                    <div class="photo-frame"><img src="pic2.jpg" alt="2"></div>
+                    <div class="photo-frame"><img src="pic3.jpg" alt="3"></div>
+                    <div class="photo-frame"><img src="pic4.jpg" alt="4"></div>
+                    <div class="photo-frame"><img src="pic5.jpg" alt="5"></div>
+                    <div class="photo-frame"><img src="pic6.jpg" alt="6"></div>
+                </div>
+
+                <div class="mt-8 text-center border-t border-gray-100 pt-2">
+                    <p class="text-[8px] font-sans text-gray-400 tracking-[0.2em] uppercase">Keep yourself alive at photoism</p>
+                </div>
+            </div>
+
         </div>
-
-        <div class="base-page">
-            <div class="flex justify-between items-center px-2">
-                <div class="w-6 h-6 border border-black opacity-10"></div> 
-                <div class="bg-black text-white text-[10px] px-4 py-1 rounded-full font-sans font-bold tracking-tighter">photoism</div>
-            </div>
-
-            <div class="photobooth-grid">
-                <div class="photo-frame"><img src="pic1.jpg" alt="Photo 1"></div>
-                <div class="photo-frame"><img src="pic2.jpg" alt="Photo 2"></div>
-                <div class="photo-frame"><img src="pic3.jpg" alt="Photo 3"></div>
-                <div class="photo-frame"><img src="pic4.jpg" alt="Photo 4"></div>
-                <div class="photo-frame"><img src="pic5.jpg" alt="Photo 5"></div>
-                <div class="photo-frame"><img src="pic6.jpg" alt="Photo 6"></div>
-            </div>
-
-            <div class="mt-6 text-center border-t border-gray-100 pt-4">
-                <p class="text-[10px] font-sans text-gray-400 tracking-[0.3em] uppercase">Keep yourself alive at photoism</p>
-            </div>
-        </div>
-
     </div>
 
     <script>
         const book = document.getElementById('book');
         const trigger = document.getElementById('trigger');
 
-        // Book Opening
         trigger.addEventListener('click', () => {
             book.classList.toggle('is-open');
         });
 
-        // Floating Hearts
         const bg = document.getElementById('hearts-bg');
         function createHeart() {
             const h = document.createElement('div');
             h.classList.add('bg-heart');
             h.innerHTML = '❤';
             h.style.left = Math.random() * 100 + 'vw';
-            h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            h.style.fontSize = (Math.random() * 15 + 10) + 'px';
             h.style.animationDuration = (Math.random() * 3 + 4) + 's';
             bg.appendChild(h);
             setTimeout(() => h.remove(), 6000);
         }
-        setInterval(createHeart, 400);
+        setInterval(createHeart, 600);
     </script>
 </body>
 </html>
